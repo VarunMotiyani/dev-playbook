@@ -13,6 +13,42 @@ The system has one core belief: **the expensive mistakes happen before any code 
 
 ---
 
+## Requires: the Superpowers plugin
+
+This skill is an **overlay on `superpowers`**, not a replacement. Superpowers' skill chain already implements the mechanics of every stage; this skill orders them, wires in the gates, and adds a handful of practices Superpowers doesn't cover.
+
+**Preflight — do this before Stage 1, every time:**
+
+1. Check whether the `superpowers` skills are available (e.g. `superpowers:brainstorming`, `superpowers:subagent-driven-development` appear in your skill list, or `~/.claude/plugins/cache/*/superpowers/` exists).
+2. **If they are not installed, STOP.** Tell the user:
+   > This skill requires the **superpowers** plugin. Install it through the `/plugin`
+   > menu (it's published in the official marketplace as `superpowers`), then
+   > re-invoke me. Built and tested against superpowers 6.3.0.
+   Do not proceed with a hand-rolled version of the method — the point of this skill is to run Superpowers correctly, not to reimplement it.
+3. Once present, `superpowers:using-superpowers` governs skill discipline; invoke the stage skills below as you reach each stage.
+
+**Stage → Superpowers skill:**
+
+| Stage(s) | Invoke |
+|---|---|
+| 1 — Shared understanding | `superpowers:brainstorming` |
+| 2–4 — Spec, phasing, plan | `superpowers:writing-plans` (brainstorming produces the spec first) |
+| 5–9 — Execution setup, task loop, whole-branch review | `superpowers:subagent-driven-development` |
+| 10 — Finishing | `superpowers:finishing-a-development-branch` |
+| any bug hunt | `superpowers:systematic-debugging` |
+
+**What this overlay adds on top of Superpowers** (the rest of this document is the detail):
+
+- **Committed carry-forward docs** (§13) — deferred findings survive the gitignored SDD ledger.
+- **Debugging discipline as a gate** (§15) — reproduce → inspect real failure state → one hypothesis → test it; plus driving a GUI for acceptance/repro.
+- **Explicit autonomy boundaries** (§14) and the four halting conditions (§12), stated up front.
+- **Tighter ledger / ruling bookkeeping** — the `Ruling:` format and the "surface every ruling to the human at finish" rule.
+- The **Stage 3 phasing** step — splitting a large spec into sequential, independently shippable sub-projects — as a first-class stage rather than a note.
+
+The stage sections below carry the full method so it stays legible in one read, and so it degrades gracefully if a Superpowers skill is mid-refactor. Where a stage section and the live Superpowers skill disagree, **follow the Superpowers skill** and treat this as commentary.
+
+---
+
 ## 0. The shape of the whole thing
 
 ```
@@ -82,6 +118,8 @@ Each arrow is a gate. You do not cross it until its condition is met.
 
 ## 3. Stage 1 — Idea to shared understanding
 
+> **Run `superpowers:brainstorming`.** This section is what to hold in mind while you do — the classification call, the delegated-decisions rule, and the approval gate.
+
 This stage is a conversation. No code, no scaffolding, no file creation until the human approves what you intend.
 
 ### 3.1 Classify the request first, and say the classification out loud
@@ -116,6 +154,8 @@ The stage ends with the human explicitly approving what you intend to build. Pre
 ---
 
 ## 4. Stage 2 — The spec
+
+> Still inside `superpowers:brainstorming` — it writes the design doc to `docs/superpowers/specs/` and commits it. This section is the section checklist and the self-review to apply before the human gate.
 
 Write the approved design to a dated design doc and **commit it before planning starts**. Suggested location: `docs/specs/YYYY-MM-DD-<topic>.md`. The spec and every plan are committed to version control before their execution run begins — they are the durable record the run argues from.
 
@@ -168,6 +208,8 @@ Order phases so each depends only on what's already built. A common shape: **fou
 ---
 
 ## 6. Stage 4 — The plan (one per phase)
+
+> **Run `superpowers:writing-plans`** (once per phase). This section is its intent restated — file-structure-first, task right-sizing, real code in every step, the `Interfaces` block, the placeholder ban, the self-review.
 
 Write for a competent engineer who knows nothing about this codebase or domain and has questionable taste. Document everything they need.
 
@@ -240,6 +282,8 @@ Offer the human the execution mode: subagent-driven (fresh subagent per task, re
 ---
 
 ## 7. Stage 5 — Execution setup
+
+> **Run `superpowers:subagent-driven-development`** — it owns Stages 5 through 9: workspace, ledger, pre-flight scan, the per-task implementer + reviewer loop, the fix loop, and the whole-branch final review. Its bundled `scripts/` (`sdd-workspace`, `task-brief`, `review-package`) are the tools referenced throughout. The sections below are the operating detail and the overlay's additions (carry-forward docs, ruling bookkeeping).
 
 ### 7.1 Isolated workspace
 
@@ -385,6 +429,8 @@ Then delete the run's scratch workspace — version history is the record now.
 ---
 
 ## 10. Stage 8 — Finishing
+
+> **Run `superpowers:finishing-a-development-branch`.** This section is its shape — verify on the real tree, confirm the base, present the options and wait, discard only on the explicit word.
 
 1. **Run the full test suite on the exact tree you're about to integrate.** A green run earlier in the session only proves the tree it ran on. Failing → report and stop; the options come after green.
 2. **Confirm the base** the work forks from. Integrating into the wrong base is expensive to undo.

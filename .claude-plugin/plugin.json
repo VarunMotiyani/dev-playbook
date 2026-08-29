@@ -1,7 +1,8 @@
 {
   "name": "dev-playbook",
-  "version": "0.1.0",
-  "description": "An opinionated, end-to-end method for taking an idea to reviewed, merged code with orchestrated subagents: classify -> brainstorm -> spec -> phase -> plan -> per-task implementer+reviewer loop -> whole-branch review -> fix wave -> finish.",
+  "version": "0.2.0",
+  "description": "An overlay on the superpowers plugin (required): orders its skills into one arc — classify -> brainstorm -> spec -> phase -> plan -> per-task implementer+reviewer loop -> whole-branch review -> fix wave -> finish — and adds carry-forward docs, debugging-as-a-gate, autonomy boundaries, and tighter ledger/ruling bookkeeping.",
   "author": { "name": "Varun Motiyani" },
-  "keywords": ["workflow", "planning", "code-review", "subagents", "orchestration", "sdd"]
+  "homepage": "https://github.com/VarunMotiyani/dev-playbook",
+  "keywords": ["workflow", "planning", "code-review", "subagents", "orchestration", "sdd", "superpowers"]
 }

@@ -4,6 +4,17 @@ A Claude Code plugin that packages one opinionated method for taking a feature o
 new subsystem from a raw idea to reviewed, merged code — using a coordinating
 session plus fresh subagents per task.
 
+## Requires
+
+**The [`superpowers`](https://github.com/obra/superpowers) plugin.** `dev-playbook`
+is an *overlay*: it orders Superpowers' skills into one arc, adds the human gates,
+and layers on a few practices Superpowers doesn't cover. It is not a standalone
+reimplementation. The skill's preflight step stops and tells the user to install
+Superpowers if it's missing.
+
+Install it through the `/plugin` menu — it's published in the official marketplace
+as `superpowers`. Built and tested against superpowers **6.3.0**.
+
 ## What's in it
 
 | Path | What |
@@ -28,21 +39,31 @@ For a small, well-scoped change to code that already exists, the skill tells you
 take the lighter "bounded" path instead — a short in-chat design, an explicit yes,
 then implement. Don't run the full arc for a one-file fix.
 
-## Relationship to Superpowers
+## How it uses Superpowers
 
-This overlaps heavily with the `superpowers` skill chain
-(`brainstorming` -> `writing-plans` -> `subagent-driven-development` ->
-`finishing-a-development-branch`). It is a consolidated, single-document version of
-that flow plus adaptations learned in practice:
+Each stage delegates to a Superpowers skill; `dev-playbook` supplies the ordering,
+the gates, and the additions:
+
+| Stage | Delegates to |
+|---|---|
+| Shared understanding | `superpowers:brainstorming` |
+| Spec, phasing, plan | `superpowers:writing-plans` |
+| Execution, task loop, whole-branch review | `superpowers:subagent-driven-development` |
+| Finishing | `superpowers:finishing-a-development-branch` |
+| Bug hunts | `superpowers:systematic-debugging` |
+
+What the overlay adds on top:
 
 - committed **carry-forward docs** so deferred findings survive a gitignored ledger,
 - **GUI-driving for acceptance / repro** (screenshot + coordinate input + process
   sampling to tell idle from wedged),
-- explicit **debugging discipline** as its own principle,
-- tighter **ledger / ruling** bookkeeping rules.
+- **debugging discipline** as an explicit gate,
+- explicit **autonomy boundaries** + the four halting conditions,
+- tighter **ledger / ruling** bookkeeping (the `Ruling:` format; surface every
+  ruling to the human at finish),
+- **phasing** a large spec into sequential shippable sub-projects as a first-class step.
 
-If you already run Superpowers, treat this as a reference overlay rather than a
-replacement.
+Where this document and a live Superpowers skill disagree, follow the Superpowers skill.
 
 ## Roadmap
 
