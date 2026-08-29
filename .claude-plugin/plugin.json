@@ -1,0 +1,7 @@
+{
+  "name": "dev-playbook",
+  "version": "0.1.0",
+  "description": "An opinionated, end-to-end method for taking an idea to reviewed, merged code with orchestrated subagents: classify -> brainstorm -> spec -> phase -> plan -> per-task implementer+reviewer loop -> whole-branch review -> fix wave -> finish.",
+  "author": { "name": "Varun Motiyani" },
+  "keywords": ["workflow", "planning", "code-review", "subagents", "orchestration", "sdd"]
+}
